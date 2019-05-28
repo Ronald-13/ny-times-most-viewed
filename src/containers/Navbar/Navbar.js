@@ -48,6 +48,7 @@ class Navbar extends Component {
         // only update chart if the location has changed
         if (prevProps.location !== this.props.location) {
             this.searchInputHandler(this.props.location);
+            this.props.onChange();
         }
     }
 
