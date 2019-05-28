@@ -1,6 +1,6 @@
 import React from 'react';
 import Aux from '../../hoc/Auxx'
-import Navbar from "../Navbar/Navbar";
+import Navbar from "../../containers/Navbar/Navbar";
 import './Layout.scss';
 
 const layout = (props) => (

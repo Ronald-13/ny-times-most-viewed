@@ -5,11 +5,18 @@ import App from './containers/App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
+import { createStore } from "redux";
+import reducer from './store/reducer';
+import { Provider } from 'react-redux'
+
+const store = createStore(reducer);
 
 const app = (
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
 )
 ReactDOM.render(app, document.getElementById('root'));
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getArticles } from '../../services/rest';
 import Article from '../../components/Article/Article';
+import { connect } from 'react-redux';
 
 class Articles extends Component {
     constructor(props) {
@@ -21,8 +22,15 @@ class Articles extends Component {
     }
 
     render() {
-        const articles = [...this.state.articles];
-
+        let articles = [...this.state.articles];
+        if (this.props.search) {
+            articles = this.state.articles.filter(article => {
+                if (article.title.toLowerCase().includes(this.props.search.toLowerCase())) {
+                    return article;
+                }
+                return null;
+            })
+        }
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -39,4 +47,10 @@ class Articles extends Component {
     }
 }
 
-export default Articles;
+const mapStateToProps = state => {
+    return {
+        search: state.search
+    }
+}
+
+export default connect(mapStateToProps)(Articles);

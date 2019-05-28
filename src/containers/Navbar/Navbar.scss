@@ -19,3 +19,9 @@
     position: fixed !important;
     z-index: 1;
 }
+
+@media (max-width: 576px) { 
+    .nav-title{
+        font-size: 12px;
+    }
+ }
