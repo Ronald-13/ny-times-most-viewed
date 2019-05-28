@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Navbar.scss';
 import menuIcon from '../../assets/icons/white-menu.jpg';
+import searchIcon from '../../assets/icons/search.png';
+import closeIcon from '../../assets/icons/close.png';
 import { connect } from 'react-redux';
 import { SEARCH_TEXT } from '../../store/actions';
 import { withRouter } from 'react-router-dom';
@@ -9,14 +11,16 @@ class Navbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showSearch: true
+            showSearch: true,
+            showSearchInputBox: false
         }
     }
 
     searchInputHandler = (location) => {
         if (location.pathname !== '/') {
             this.setState({
-                showSearch: false
+                showSearch: false,
+                showSearchInputBox: false
             })
         }
         else {
@@ -24,6 +28,20 @@ class Navbar extends Component {
                 showSearch: true
             })
         }
+    }
+
+    openSearchTextBox = () => {
+        this.setState({
+            showSearchInputBox: true
+        })
+    }
+
+    closeSearchTextBox = () => {
+        this.props.onChange();
+        this.setState({
+            showSearch: true,
+            showSearchInputBox: false
+        })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -34,21 +52,35 @@ class Navbar extends Component {
     }
 
     render() {
+        let searchInputBox = (
+            <span>
+                <input type="text" className="display-inline form-control" placeholder="Search" onChange={this.props.onChange.bind(this)} />
+                <img src={closeIcon} width="20" height="20" className="align" alt="" onClick={() => this.closeSearchTextBox()} />
+            </span>
+        );
+        let defaultSearch = (
+            <div>
+                <img src={searchIcon} width="20" height="20" className="align" alt="" onClick={() => this.openSearchTextBox()} />
+            </div>
+        )
         return (
             <nav className="navbar aqua-marine" >
                 <div className="navbar-brand white">
                     <div className="row">
                         <div className="col-6">
-                            <img src={menuIcon} width="20" height="20" className="d-inline-block align" alt="" />
-                            <span className="nav-title pad-left">NY Times Most Popular</span>
+                            <img src={menuIcon} width="20" height="20" className="align" alt="" />
+                            <span className={this.state.showSearchInputBox ? 'nav-title pad-left' : 'pad-left'}>NY Times Most Popular</span>
                         </div>
-                        {
-                            this.state.showSearch ? <div className="col-6">
-                                <div className="float-right">
-                                    <input type="text" className="form-control" placeholder="Search" onChange={this.props.onChange.bind(this)} />
-                                </div>
-                            </div> : null
-                        }
+                        <div className="col-6">
+                            <div className="float-right">
+                                {
+                                    (this.state.showSearch) ?
+                                        (this.state.showSearchInputBox ? searchInputBox : defaultSearch)
+                                        :
+                                        null
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </nav >
@@ -61,7 +93,7 @@ const mapDispatchToProps = dispatch => {
         onChange: (e) => dispatch({
             type: SEARCH_TEXT,
             payload: {
-                search: e.target.value,
+                search: e ? e.target.value : null,
             }
         })
     }
